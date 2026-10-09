@@ -22,7 +22,7 @@ export function TripFormDialog({ open, onOpenChange, trip, prefill }: { open: bo
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((p) => ({ ...p, [k]: v }));
 
   const save = () => {
-    if (!f.customer || !f.origin || !f.destination) return toast.error("Customer, origin and destination are required");
+    if (!f.customer || !f.origin || !f.destination) { toast.error("Customer, origin and destination are required"); return; }
     if (trip) {
       setTrips((ts) => ts.map((t) => (t.id === trip.id ? { ...t, ...f } : t)));
       toast.success(`${trip.id} updated`);

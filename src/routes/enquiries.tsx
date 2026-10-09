@@ -149,7 +149,7 @@ function EnquiriesPage() {
                         </button>
                         <div className="mt-2 flex items-center justify-between text-xs"><span className="font-semibold">{fmtL(e.value)}/mo</span><span className="text-muted-foreground">{e.owner}</span></div>
                         <div className="mt-2 flex gap-1">
-                          {STAGES.indexOf(s) < 3 && s !== "Qualified" && <button onClick={() => patch(e.id, { stage: STAGES[STAGES.indexOf(s) + 1] }, `Moved to ${STAGES[STAGES.indexOf(s) + 1]}`)} className="rounded-md border px-2 py-1 text-xs hover:bg-muted">Advance →</button>}
+                          {STAGES.indexOf(s) < 3 && s !== "Qualified" && <button onClick={() => patch(e.id, { stage: STAGES[STAGES.indexOf(s) + 1] as Stage }, `Moved to ${STAGES[STAGES.indexOf(s) + 1]}`)} className="rounded-md border px-2 py-1 text-xs hover:bg-muted">Advance →</button>}
                           {s === "Qualified" && <button onClick={() => convert(e)} className="rounded-md bg-success px-2 py-1 text-xs font-medium text-primary-foreground">Convert to trip</button>}
                         </div>
                       </div>

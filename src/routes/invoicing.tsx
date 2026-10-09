@@ -48,13 +48,13 @@ function InvoicingPage() {
   };
 
   const newInvoice = (): Invoice => {
-    const n = Math.max(...list.map((i) => parseInt(i.id.split("-")[2], 10))) + 1;
-    return { id: `INV-24-${String(n).padStart(4, "0")}`, customer: accounts[0].name, trip: trips[0]?.id ?? "", issued: "2026-10-09", due: "2026-10-24", amount: 0, paid: 0, status: "Draft" };
+    const n = Math.max(...list.map((i) => parseInt(i.id.split("-")[2] ?? "0", 10))) + 1;
+    return { id: `INV-24-${String(n).padStart(4, "0")}`, customer: accounts[0]?.name ?? "", trip: trips[0]?.id ?? "", issued: "2026-10-09", due: "2026-10-24", amount: 0, paid: 0, status: "Draft" };
   };
 
   const print = (i: Invoice) => {
     const w = window.open("", "_blank", "width=720,height=900");
-    if (!w) return toast.error("Allow pop-ups to print");
+    if (!w) { toast.error("Allow pop-ups to print"); return; }
     w.document.write(`<html><head><title>${i.id}</title></head><body style="font-family:Inter,sans-serif;padding:40px"><h1>HireD — Tax Invoice (Sample)</h1><p><b>${i.id}</b><br/>Billed to: ${i.customer}<br/>Trip: ${i.trip}<br/>Issued: ${i.issued} · Due: ${i.due}</p><hr/><p>Freight charges: ${inr(Math.round(i.amount / 1.18))}<br/>GST 18%: ${inr(i.amount - Math.round(i.amount / 1.18))}<br/><b>Total: ${inr(i.amount)}</b><br/>Paid: ${inr(i.paid)}<br/>Balance: ${inr(i.amount - i.paid)}</p><p style="color:#888">Sample document — not a real invoice.</p></body></html>`);
     w.document.close();
     w.print();
