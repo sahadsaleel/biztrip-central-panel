@@ -188,7 +188,7 @@ function InvoicingPage() {
                 <div className="space-y-1.5"><Label>Due date</Label><Input type="date" value={form.due} onChange={(e) => setForm({ ...form, due: e.target.value })} /></div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => save(form, `${form.id} saved as draft`) || setForm(null)}>Save draft</Button>
+                <Button variant="outline" onClick={() => { save(form, `${form.id} saved as draft`); setForm(null); }}>Save draft</Button>
                 <Button onClick={() => { if (form.amount <= 0) return toast.error("Enter an amount"); save({ ...form, status: "Issued" }, `${form.id} issued`); setForm(null); }}>Issue invoice</Button>
               </DialogFooter>
             </>
