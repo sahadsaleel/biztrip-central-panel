@@ -13,7 +13,7 @@ const blank = (): Omit<Trip, "id"> => ({
   driver: "Unassigned", vehicle: "—", status: "Scheduled", sla: "On Track", progress: 0,
 });
 
-export function TripFormDialog({ open, onOpenChange, trip, prefill }: { open: boolean; onOpenChange: (v: boolean) => void; trip?: Trip; prefill?: Partial<Trip> }) {
+export function TripFormDialog({ open, onOpenChange, trip, prefill }: { open: boolean; onOpenChange: (v: boolean) => void; trip?: Trip | undefined; prefill?: Partial<Trip> | undefined }) {
   const { trips, setTrips, accounts } = useStore();
   const [f, setF] = useState(blank());
   useEffect(() => {

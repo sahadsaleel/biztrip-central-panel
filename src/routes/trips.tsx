@@ -12,7 +12,7 @@ import { TripFormDialog } from "@/components/hired/TripFormDialog";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/trips")({
-  validateSearch: (s: Record<string, unknown>): { customer?: string } => (typeof s.customer === "string" ? { customer: s.customer } : {}),
+  validateSearch: (s: Record<string, unknown>): { customer?: string } => (typeof s["customer"] === "string" ? { customer: s["customer"] } : {}),
   head: () => ({
     meta: [
       { title: "B2B Trips — HireD Ops" },

@@ -39,7 +39,7 @@ export function Kpi({ label, value, hint, icon: Icon, tone = "primary" }: { labe
   );
 }
 
-export function Pill({ tone = "muted", children }: { tone?: Tone; children: ReactNode }) {
+export function Pill({ tone = "muted", children }: { tone?: Tone | undefined; children: ReactNode }) {
   return <span className={cn("inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium", tones[tone])}>{children}</span>;
 }
 
