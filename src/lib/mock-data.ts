@@ -82,3 +82,30 @@ export const accounts: Account[] = [
 
 export const fmtL = (v: number) => `₹${v.toFixed(1)} L`;
 export const utilisation = (a: Account) => Math.round((a.outstanding / a.limit) * 100);
+
+export type AccountEventType = "Invoice Raised" | "Payment Received" | "Credit Limit Changed" | "Status Changed" | "Reminder Sent";
+
+export interface AccountEvent {
+  id: string;
+  accountId: string;
+  date: string;
+  type: AccountEventType;
+  detail: string;
+  amount?: number; // lakhs, positive = debit, negative = credit
+}
+
+export const accountEvents: AccountEvent[] = [
+  { id: "EVT-01", accountId: "ACC-001", date: "2026-10-08", type: "Invoice Raised", detail: "INV-2081 · Delhi → Lucknow FTL", amount: 3.4 },
+  { id: "EVT-02", accountId: "ACC-001", date: "2026-10-06", type: "Payment Received", detail: "NEFT · UTR HDFC0001234", amount: -6.0 },
+  { id: "EVT-03", accountId: "ACC-001", date: "2026-10-02", type: "Reminder Sent", detail: "Overdue reminder for ₹12.4 L" },
+  { id: "EVT-04", accountId: "ACC-001", date: "2026-09-20", type: "Credit Limit Changed", detail: "Limit raised ₹40 L → ₹50 L" },
+  { id: "EVT-05", accountId: "ACC-002", date: "2026-10-07", type: "Status Changed", detail: "Placed On Hold — overdue ₹8.1 L" },
+  { id: "EVT-06", accountId: "ACC-002", date: "2026-10-05", type: "Invoice Raised", detail: "INV-2079 · Mumbai → Surat Express", amount: 2.1 },
+  { id: "EVT-07", accountId: "ACC-002", date: "2026-09-28", type: "Payment Received", detail: "UPI · Ref 88231045", amount: -4.5 },
+  { id: "EVT-08", accountId: "ACC-003", date: "2026-10-06", type: "Invoice Raised", detail: "INV-2077 · Hyderabad → Warangal FTL", amount: 5.2 },
+  { id: "EVT-09", accountId: "ACC-003", date: "2026-10-01", type: "Payment Received", detail: "RTGS · UTR SBIN0098712", amount: -10.0 },
+  { id: "EVT-10", accountId: "ACC-004", date: "2026-10-04", type: "Reminder Sent", detail: "Overdue reminder for ₹4.6 L" },
+  { id: "EVT-11", accountId: "ACC-004", date: "2026-09-30", type: "Invoice Raised", detail: "INV-2072 · Delhi → Jaipur PTL", amount: 1.8 },
+  { id: "EVT-12", accountId: "ACC-005", date: "2026-10-03", type: "Payment Received", detail: "NEFT · UTR ICICI005566", amount: -3.0 },
+  { id: "EVT-13", accountId: "ACC-005", date: "2026-09-25", type: "Credit Limit Changed", detail: "Limit raised ₹10 L → ₹15 L" },
+];
