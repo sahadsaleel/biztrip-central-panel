@@ -15,6 +15,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/invoicing")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Invoicing — HireD Ops" },
       { name: "description", content: "Manage sample invoices, payment records and outstanding balances." },
       { property: "og:title", content: "Invoicing — HireD Ops" },

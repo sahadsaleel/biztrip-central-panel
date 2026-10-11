@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Inbox, PhoneCall, Target, UserX, Search, Download, LayoutList, Columns3, Pencil, ArrowRightCircle } from "lucide-react";
+import { Inbox, PhoneCall, Target, UserX, Search, Download, LayoutList, Pencil, Plus, Sparkles, Route as RouteIcon, ArrowRightLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -9,13 +9,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useStore, nextId, downloadCsv } from "@/lib/store";
 import { OWNERS, SOURCES, STAGES, fmtL, type Enquiry, type Stage } from "@/lib/mock-data";
-import { Kpi, Card, Pill, PageHeader, NativeSelect, stageTone, th, td } from "@/components/hired/ui";
+import { Pill, NativeSelect, stageTone } from "@/components/hired/ui";
 import { cn } from "@/lib/utils";
+import { inr } from "@/lib/invoices";
+import { OverviewHeader, OverviewMetric, OverviewPanel } from "@/components/hired/OverviewUI";
 
 export const Route = createFileRoute("/enquiries")({
   head: () => ({
     meta: [
       { title: "Enquiries / CRM — HireD Ops" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "description", content: "B2B lead pipeline from first touch to converted trip." },
       { property: "og:title", content: "Enquiries / CRM — HireD Ops" },
       { property: "og:description", content: "B2B lead pipeline from first touch to converted trip." },
@@ -28,7 +32,6 @@ const TODAY = "2026-10-09";
 
 function EnquiriesPage() {
   const { enquiries, setEnquiries, trips, setTrips } = useStore();
-  const [mode, setMode] = useState<"table" | "kanban">("table");
   const [q, setQ] = useState("");
   const [stage, setStage] = useState("All stages");
   const [owner, setOwner] = useState("All owners");
@@ -69,98 +72,24 @@ function EnquiriesPage() {
 
   return (
     <>
-      <PageHeader
-        title="Enquiries / CRM"
-        subtitle="B2B lead pipeline from first touch to converted trip."
-        actions={
-          <>
-            <Button variant="outline" onClick={() => { downloadCsv("hired-enquiries.csv", rows as unknown as Record<string, unknown>[]); toast.success(`Exported ${rows.length} enquiries`); }}><Download className="size-4" />Export</Button>
-            <Button onClick={() => setForm("new")}>+ Add Enquiry</Button>
-          </>
-        }
-      />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Kpi label="Open Enquiries" value={open.length} icon={Inbox} />
-        <Kpi label="Needs Follow-Up" value={open.filter((e) => e.nextFollowUp <= TODAY).length} icon={PhoneCall} tone="warning" />
-        <Kpi label="Qualified Pipeline" value={enquiries.filter((e) => e.stage === "Qualified").length} icon={Target} tone="success" />
-        <Kpi label="Unassigned Owner" value={open.filter((e) => e.owner === "Unassigned").length} icon={UserX} tone="danger" />
+      <div className="overview-page">
+      <OverviewHeader title="Enquiries / CRM" badge={<Pill tone="primary">{open.length} active</Pill>} subtitle="B2B lead pipeline from first touch to converted trip." actions={<><NativeSelect label="Date" value={date} onChange={setDate} options={["Any date", "Last 7 days", "Last 30 days"]} /><Button onClick={() => setForm("new")}><Plus />Add Enquiry</Button></>} />
+      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+        <OverviewMetric label="Open Enquiries" value={open.length} icon={Inbox} detail="across all sources" />
+        <OverviewMetric label="Needs Follow-Up" value={open.filter((e) => e.nextFollowUp <= TODAY).length} icon={PhoneCall} tone="warning" detail="to contact, awaiting reply" trend="Action required" />
+        <OverviewMetric label="Qualified Pipeline" value={enquiries.filter((e) => e.stage === "Qualified").length} icon={Target} tone="success" detail="ready to convert" trend={`${fmtL(enquiries.filter((e) => e.stage === "Qualified").reduce((sum, e) => sum + e.value, 0))}/mo`} />
+        <OverviewMetric label="Unassigned Owner" value={open.filter((e) => e.owner === "Unassigned").length} icon={UserX} tone="danger" detail="assign an ops owner" trend="Needs attention" />
       </div>
-
-      <Card className="mt-6">
-        <div className="flex flex-wrap items-center gap-2 border-b p-4">
-          <div className="relative min-w-56 flex-1">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search enquiries" className="h-9 w-full rounded-lg border bg-card pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring/30" />
-          </div>
-          <NativeSelect label="Stage" value={stage} onChange={setStage} options={["All stages", ...STAGES]} />
-          <NativeSelect label="Owner" value={owner} onChange={setOwner} options={["All owners", ...OWNERS]} />
-          <NativeSelect label="Source" value={source} onChange={setSource} options={["All sources", ...SOURCES]} />
-          <NativeSelect label="Date" value={date} onChange={setDate} options={["Any date", "Last 7 days", "Last 30 days"]} />
-          <NativeSelect label="Sort" value={sort} onChange={setSort} options={["Newest", "Highest value"]} />
-          <div className="flex rounded-lg border p-0.5">
-            {([["table", LayoutList], ["kanban", Columns3]] as const).map(([m, I]) => (
-              <button key={m} aria-label={`${m} view`} onClick={() => setMode(m)} className={cn("rounded-md p-1.5", mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground")}><I className="size-4" /></button>
-            ))}
-          </div>
-        </div>
-
-        {mode === "table" ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-muted/50"><tr>{["ID", "Company", "Contact", "Route", "Est. value", "Source", "Owner", "Stage", "Last contact", "Next follow-up", ""].map((h) => <th key={h} className={th}>{h}</th>)}</tr></thead>
-              <tbody className="divide-y">
-                {rows.map((e) => (
-                  <tr key={e.id} className="hover:bg-muted/40">
-                    <td className={cn(td, "font-medium text-primary")}><button onClick={() => setView(e)}>{e.id}</button></td>
-                    <td className={cn(td, "font-medium")}>{e.company}</td>
-                    <td className={td}>{e.contact}</td>
-                    <td className={td}>{e.origin} → {e.destination}</td>
-                    <td className={td}>{fmtL(e.value)}/mo</td>
-                    <td className={td}>{e.source}</td>
-                    <td className={td}><select aria-label="Owner" value={e.owner} onChange={(ev) => patch(e.id, { owner: ev.target.value }, `Owner set to ${ev.target.value}`)} className={cn("rounded-md border bg-card px-2 py-1 text-xs", e.owner === "Unassigned" && "text-danger")}>{OWNERS.map((o) => <option key={o}>{o}</option>)}</select></td>
-                    <td className={td}><select aria-label="Stage" value={e.stage} onChange={(ev) => patch(e.id, { stage: ev.target.value as Stage }, `Moved to ${ev.target.value}`)} className="rounded-md border bg-card px-2 py-1 text-xs">{STAGES.map((s) => <option key={s}>{s}</option>)}</select></td>
-                    <td className={td}>{e.lastContact}</td>
-                    <td className={cn(td, e.nextFollowUp <= TODAY && e.stage !== "Converted" && "font-medium text-warning")}>{e.nextFollowUp}</td>
-                    <td className={td}>
-                      <div className="flex gap-1">
-                        <button aria-label="Edit" onClick={() => setForm(e)} className="rounded-md p-1.5 hover:bg-muted"><Pencil className="size-4" /></button>
-                        {e.stage === "Qualified" && <button aria-label="Convert to trip" onClick={() => convert(e)} className="rounded-md p-1.5 text-success hover:bg-success-soft"><ArrowRightCircle className="size-4" /></button>}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                {!rows.length && <tr><td colSpan={11} className="py-10 text-center text-sm text-muted-foreground">No enquiries match your filters.</td></tr>}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="grid gap-4 p-4 md:grid-cols-2 xl:grid-cols-4">
-            {STAGES.map((s) => {
-              const col = rows.filter((e) => e.stage === s);
-              return (
-                <div key={s} className="rounded-xl bg-muted/50 p-3">
-                  <div className="mb-3 flex items-center justify-between"><Pill tone={stageTone[s]}>{s}</Pill><span className="text-xs text-muted-foreground">{col.length} · {fmtL(col.reduce((a, e) => a + e.value, 0))}</span></div>
-                  <div className="space-y-2">
-                    {col.map((e) => (
-                      <div key={e.id} className="rounded-xl border bg-card p-3 shadow-sm">
-                        <button onClick={() => setView(e)} className="text-left">
-                          <p className="text-sm font-medium">{e.company}</p>
-                          <p className="text-xs text-muted-foreground">{e.origin} → {e.destination}</p>
-                        </button>
-                        <div className="mt-2 flex items-center justify-between text-xs"><span className="font-semibold">{fmtL(e.value)}/mo</span><span className="text-muted-foreground">{e.owner}</span></div>
-                        <div className="mt-2 flex gap-1">
-                          {STAGES.indexOf(s) < 3 && s !== "Qualified" && <button onClick={() => patch(e.id, { stage: STAGES[STAGES.indexOf(s) + 1] as Stage }, `Moved to ${STAGES[STAGES.indexOf(s) + 1]}`)} className="rounded-md border px-2 py-1 text-xs hover:bg-muted">Advance →</button>}
-                          {s === "Qualified" && <button onClick={() => convert(e)} className="rounded-md bg-success px-2 py-1 text-xs font-medium text-primary-foreground">Convert to trip</button>}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </Card>
+      <OverviewPanel title="Lead Pipeline" icon={Sparkles} subtitle={`${rows.length} shown`} className="mt-5" actions={<div className="relative w-full sm:w-64"><Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" /><Input aria-label="Search enquiries" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Company, contact or lane" className="h-8 border-0 bg-primary-soft pl-9 text-xs" /></div>}>
+        <div className="flex flex-wrap gap-2 px-5 pb-4">{["All sources", ...SOURCES].map((s) => <Button key={s} size="sm" variant={source === s ? "default" : "secondary"} className="h-7 rounded-full px-3 text-[11px]" onClick={() => setSource(s)}>{s}</Button>)}</div>
+        <div className="grid gap-3 px-5 pb-5 sm:grid-cols-2 xl:grid-cols-4">{STAGES.map((s) => { const col = rows.filter((e) => e.stage === s); return <div key={s} className="min-w-0 rounded-lg bg-background p-3"><div className="mb-3 flex items-center justify-between"><h3 className="flex items-center gap-2 text-[10px] font-semibold uppercase"><span className={cn("size-1.5 rounded-full", s === "Converted" ? "bg-success" : s === "Qualified" ? "bg-primary" : s === "Contacted" ? "bg-warning" : "bg-info")} />{s}</h3><span className="grid size-5 place-items-center rounded-full bg-card text-[10px] text-muted-foreground">{col.length}</span></div><div className="space-y-3">{col.map((e) => <div key={e.id} className="rounded-lg border border-border/50 bg-card p-3"><Button variant="link" onClick={() => setView(e)} className="h-auto w-full justify-start overflow-hidden p-0 text-xs font-semibold text-foreground"><span className="truncate">{e.company}</span></Button><p className="mt-2 flex items-start gap-1.5 text-[10px] text-muted-foreground"><RouteIcon className="mt-0.5 size-3 shrink-0" />{e.origin} → {e.destination}</p><p className="mt-2 text-base font-semibold">{inr(e.value * 100000)}<span className="ml-1 text-[10px] font-normal text-muted-foreground">/ mo</span></p><div className="mt-2 flex items-center justify-between gap-1 text-[10px] text-muted-foreground"><span>{e.source}</span><span>{e.lastContact.slice(5)}</span></div><p className={cn("mt-2 truncate text-[10px]", e.owner === "Unassigned" ? "text-danger" : "text-muted-foreground")}>{e.owner}</p>{s === "Qualified" ? <Button variant="secondary" size="sm" className="mt-3 h-7 w-full text-[10px] text-primary" onClick={() => convert(e)}><ArrowRightLeft />Convert to Trip</Button> : s === "Converted" ? <div className="mt-3 flex h-7 items-center justify-center gap-1 rounded bg-success-soft text-[10px] text-success"><CheckCircle2 className="size-3" />Converted</div> : <Button variant="secondary" size="sm" className="mt-3 h-7 w-full text-[10px] text-primary" onClick={() => patch(e.id, { stage: s === "New" ? "Contacted" : "Qualified" }, `Moved to ${s === "New" ? "Contacted" : "Qualified"}`)}><ArrowRight />{s === "New" ? "Mark contacted" : "Qualify lead"}</Button>}</div>)}{!col.length && <p className="py-8 text-center text-[11px] text-muted-foreground">No enquiries</p>}</div></div>; })}</div>
+      </OverviewPanel>
+      <OverviewPanel title="All Enquiries" icon={LayoutList} subtitle={`${rows.length} total`} className="mt-5" actions={<Button variant="secondary" size="sm" onClick={() => { downloadCsv("hired-enquiries.csv", rows as unknown as Record<string, unknown>[]); toast.success(`Exported ${rows.length} enquiries`); }}><Download />Export CSV</Button>}>
+        <div className="flex flex-wrap gap-2 border-t border-background px-5 py-3"><NativeSelect label="Stage" value={stage} onChange={setStage} options={["All stages", ...STAGES]} /><NativeSelect label="Owner" value={owner} onChange={setOwner} options={["All owners", ...OWNERS]} /><NativeSelect label="Sort" value={sort} onChange={setSort} options={["Newest", "Highest value"]} /></div>
+        <div className="overflow-x-auto"><table className="w-full min-w-[800px]"><thead><tr>{["Enquiry", "Contact", "Lane & rate", "Source", "Owner", "Stage", "Action"].map((h) => <th key={h}>{h}</th>)}</tr></thead><tbody>{rows.map((e) => <tr key={e.id} className="hover:bg-background"><td><Button variant="link" className="h-auto p-0 text-xs font-semibold text-foreground" onClick={() => setView(e)}>{e.id}</Button><p className="mt-1 max-w-32 text-[11px] text-muted-foreground">{e.company}</p></td><td><p className="text-xs font-medium">{e.contact}</p><p className="mt-1 text-[10px] text-muted-foreground">Last contact {e.lastContact.slice(5)}</p></td><td><p className="text-xs">{e.origin} → {e.destination}</p><p className="mt-1 text-[10px] text-muted-foreground">{inr(e.value * 100000)} / mo</p></td><td>{e.source}</td><td><select aria-label={`Owner for ${e.id}`} value={e.owner} onChange={(ev) => patch(e.id, { owner: ev.target.value }, `Owner set to ${ev.target.value}`)} className={cn("max-w-32 rounded border-0 bg-transparent py-1 text-[11px]", e.owner === "Unassigned" && "font-semibold text-danger")}>{OWNERS.map((o) => <option key={o}>{o}</option>)}</select></td><td><select aria-label={`Stage for ${e.id}`} value={e.stage} onChange={(ev) => patch(e.id, { stage: ev.target.value as Stage }, `Moved to ${ev.target.value}`)} className="max-w-28 rounded-full border-0 bg-primary-soft px-2 py-1 text-[10px] text-primary">{STAGES.map((s) => <option key={s}>{s}</option>)}</select></td><td><div className="flex items-center gap-1">{e.stage === "Qualified" ? <Button size="sm" onClick={() => convert(e)}><ArrowRightLeft />Convert to Trip</Button> : e.stage === "Converted" ? <span className="text-[11px] text-muted-foreground">Converted</span> : <Button variant="secondary" size="sm" onClick={() => setView(e)}>View lead</Button>}<Button variant="ghost" size="icon" className="size-7" aria-label={`Edit ${e.id}`} title="Edit enquiry" onClick={() => setForm(e)}><Pencil /></Button></div></td></tr>)}{!rows.length && <tr><td colSpan={7} className="py-10 text-center text-muted-foreground">No enquiries match your filters.</td></tr>}</tbody></table></div>
+        <div className="border-t border-background px-5 py-4 text-[11px] text-muted-foreground">Showing {rows.length} of {enquiries.length} total CRM enquiries</div>
+      </OverviewPanel>
+      </div>
 
       <EnquiryForm
         value={form}

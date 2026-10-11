@@ -16,6 +16,7 @@ import { Route as EnquiriesRouteImport } from './routes/enquiries'
 import { Route as FleetRouteImport } from './routes/fleet'
 import { Route as InvoicingRouteImport } from './routes/invoicing'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TripsRouteImport } from './routes/trips'
 import { Route as UsersRouteImport } from './routes/users'
@@ -55,6 +56,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/fleet': typeof FleetRoute
   '/invoicing': typeof InvoicingRoute
   '/notifications': typeof NotificationsRoute
+  '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/trips': typeof TripsRoute
   '/users': typeof UsersRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/fleet': typeof FleetRoute
   '/invoicing': typeof InvoicingRoute
   '/notifications': typeof NotificationsRoute
+  '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/trips': typeof TripsRoute
   '/users': typeof UsersRoute
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/fleet': typeof FleetRoute
   '/invoicing': typeof InvoicingRoute
   '/notifications': typeof NotificationsRoute
+  '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/trips': typeof TripsRoute
   '/users': typeof UsersRoute
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/fleet'
     | '/invoicing'
     | '/notifications'
+    | '/reports'
     | '/settings'
     | '/trips'
     | '/users'
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/fleet'
     | '/invoicing'
     | '/notifications'
+    | '/reports'
     | '/settings'
     | '/trips'
     | '/users'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/fleet'
     | '/invoicing'
     | '/notifications'
+    | '/reports'
     | '/settings'
     | '/trips'
     | '/users'
@@ -155,6 +167,7 @@ export interface RootRouteChildren {
   FleetRoute: typeof FleetRoute
   InvoicingRoute: typeof InvoicingRoute
   NotificationsRoute: typeof NotificationsRoute
+  ReportsRoute: typeof ReportsRoute
   SettingsRoute: typeof SettingsRoute
   TripsRoute: typeof TripsRoute
   UsersRoute: typeof UsersRoute
@@ -211,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -243,6 +263,7 @@ const rootRouteChildren: RootRouteChildren = {
   FleetRoute: FleetRoute,
   InvoicingRoute: InvoicingRoute,
   NotificationsRoute: NotificationsRoute,
+  ReportsRoute: ReportsRoute,
   SettingsRoute: SettingsRoute,
   TripsRoute: TripsRoute,
   UsersRoute: UsersRoute,
