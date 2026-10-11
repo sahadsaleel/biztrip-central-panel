@@ -15,6 +15,8 @@ export const Route = createFileRoute("/trips")({
   validateSearch: (s: Record<string, unknown>): { customer?: string } => (typeof s["customer"] === "string" ? { customer: s["customer"] } : {}),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "B2B Trips — HireD Ops" },
       { name: "description", content: "Manage scheduled, active and completed logistics trips." },
       { property: "og:title", content: "B2B Trips — HireD Ops" },

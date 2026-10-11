@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/accounts")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Accounts & Credit — HireD Ops" },
       { name: "description", content: "Manage customer accounts, credit limits and receivables." },
       { property: "og:title", content: "Accounts & Credit — HireD Ops" },
