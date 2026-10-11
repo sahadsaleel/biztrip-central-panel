@@ -52,15 +52,15 @@
 
 :root {
   --radius: 0.875rem;
-  --background: oklch(0.979 0.006 264);
+  --background: oklch(0.984 0.009 290);
   --foreground: oklch(0.21 0.03 265);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.21 0.03 265);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0.03 265);
-  --primary: oklch(0.52 0.24 275);
+  --primary: oklch(0.54 0.265 282);
   --primary-foreground: oklch(1 0 0);
-  --primary-soft: oklch(0.95 0.03 275);
+  --primary-soft: oklch(0.963 0.021 285);
   --secondary: oklch(0.965 0.008 264);
   --secondary-foreground: oklch(0.21 0.03 265);
   --muted: oklch(0.965 0.008 264);
@@ -81,12 +81,24 @@
   --ring: oklch(0.52 0.24 275);
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0.21 0.03 265);
-  --sidebar-primary: oklch(0.52 0.24 275);
+  --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.965 0.008 264);
   --sidebar-accent-foreground: oklch(0.21 0.03 265);
   --sidebar-border: oklch(0.93 0.013 255);
   --sidebar-ring: oklch(0.52 0.24 275);
+}
+
+.overview-page { letter-spacing: 0; }
+.overview-page .overview-metric { min-height: 170px; }
+.overview-page table { font-size: 12px; }
+.overview-page th { padding: 14px 20px; font-size: 10px; font-weight: 500; text-transform: uppercase; color: var(--muted-foreground); background: var(--primary-soft); text-align: left; }
+.overview-page td { padding: 17px 20px; font-size: 12px; }
+.overview-page tbody tr + tr { border-top: 1px solid var(--background); }
+.overview-page button { box-shadow: none; }
+@media (max-width: 639px) {
+  .overview-page .overview-metric { min-height: 155px; padding: 14px; }
+  .overview-page td, .overview-page th { padding: 12px; }
 }
 
 @layer base {
