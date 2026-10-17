@@ -8,7 +8,9 @@ export function ComingSoon({ title, subtitle }: { title: string; subtitle: strin
       <div className="grid place-items-center rounded-2xl border border-dashed bg-card py-24 text-center">
         <Construction className="size-10 text-primary" />
         <p className="mt-4 font-medium">This module is next on the roadmap</p>
-        <p className="mt-1 text-sm text-muted-foreground">Dashboard, Enquiries / CRM and B2B Trips are live now.</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Dashboard, Enquiries / CRM and B2B Trips are live now.
+        </p>
       </div>
     </>
   );

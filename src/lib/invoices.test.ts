@@ -1,7 +1,16 @@
 import { describe, it, expect } from "vitest";
 import { applyPayment, type Invoice } from "./invoices";
 
-const base: Invoice = { id: "X", customer: "C", trip: "T", issued: "", due: "", amount: 1000, paid: 0, status: "Issued" };
+const base: Invoice = {
+  id: "X",
+  customer: "C",
+  trip: "T",
+  issued: "",
+  due: "",
+  amount: 1000,
+  paid: 0,
+  status: "Issued",
+};
 
 describe("simulated invoice payment", () => {
   it("partial payment marks Partially Paid", () => {

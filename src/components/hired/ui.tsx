@@ -2,7 +2,15 @@ import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function PageHeader({ title, subtitle, actions }: { title: string; subtitle: string; actions?: ReactNode }) {
+export function PageHeader({
+  title,
+  subtitle,
+  actions,
+}: {
+  title: string;
+  subtitle: string;
+  actions?: ReactNode;
+}) {
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
@@ -24,7 +32,19 @@ const tones = {
 };
 export type Tone = keyof typeof tones;
 
-export function Kpi({ label, value, hint, icon: Icon, tone = "primary" }: { label: string; value: string | number; hint?: string; icon: LucideIcon; tone?: Tone }) {
+export function Kpi({
+  label,
+  value,
+  hint,
+  icon: Icon,
+  tone = "primary",
+}: {
+  label: string;
+  value: string | number;
+  hint?: string;
+  icon: LucideIcon;
+  tone?: Tone;
+}) {
   return (
     <div className="rounded-2xl border bg-card p-5 shadow-sm">
       <div className="flex items-start justify-between">
@@ -39,15 +59,55 @@ export function Kpi({ label, value, hint, icon: Icon, tone = "primary" }: { labe
   );
 }
 
-export function Pill({ tone = "muted", children }: { tone?: Tone | undefined; children: ReactNode }) {
-  return <span className={cn("inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium", tones[tone])}>{children}</span>;
+export function Pill({
+  tone = "muted",
+  children,
+}: {
+  tone?: Tone | undefined;
+  children: ReactNode;
+}) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium",
+        tones[tone],
+      )}
+    >
+      {children}
+    </span>
+  );
 }
 
-export const stageTone: Record<string, Tone> = { New: "info", Contacted: "warning", Qualified: "primary", Converted: "success" };
-export const statusTone: Record<string, Tone> = { Scheduled: "info", "In Progress": "primary", Delayed: "warning", Completed: "success", Cancelled: "danger" };
-export const slaTone: Record<string, Tone> = { "On Track": "success", "At Risk": "warning", Breached: "danger" };
+export const stageTone: Record<string, Tone> = {
+  New: "info",
+  Contacted: "warning",
+  Qualified: "primary",
+  Converted: "success",
+};
+export const statusTone: Record<string, Tone> = {
+  Scheduled: "info",
+  "In Progress": "primary",
+  Delayed: "warning",
+  Completed: "success",
+  Cancelled: "danger",
+};
+export const slaTone: Record<string, Tone> = {
+  "On Track": "success",
+  "At Risk": "warning",
+  Breached: "danger",
+};
 
-export function Card({ title, action, children, className }: { title?: string; action?: ReactNode; children: ReactNode; className?: string }) {
+export function Card({
+  title,
+  action,
+  children,
+  className,
+}: {
+  title?: string;
+  action?: ReactNode;
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <section className={cn("rounded-2xl border bg-card shadow-sm", className)}>
       {title && (
@@ -61,7 +121,17 @@ export function Card({ title, action, children, className }: { title?: string; a
   );
 }
 
-export function NativeSelect({ value, onChange, options, label }: { value: string; onChange: (v: string) => void; options: string[]; label: string }) {
+export function NativeSelect({
+  value,
+  onChange,
+  options,
+  label,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+  label: string;
+}) {
   return (
     <select
       aria-label={label}
@@ -70,11 +140,14 @@ export function NativeSelect({ value, onChange, options, label }: { value: strin
       className="h-9 rounded-lg border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring/30"
     >
       {options.map((o) => (
-        <option key={o} value={o}>{o}</option>
+        <option key={o} value={o}>
+          {o}
+        </option>
       ))}
     </select>
   );
 }
 
-export const th = "px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground whitespace-nowrap";
+export const th =
+  "px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground whitespace-nowrap";
 export const td = "px-4 py-3 text-sm whitespace-nowrap";

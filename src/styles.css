@@ -89,16 +89,43 @@
   --sidebar-ring: oklch(0.52 0.24 275);
 }
 
-.overview-page { letter-spacing: 0; }
-.overview-page .overview-metric { min-height: 170px; }
-.overview-page table { font-size: 12px; }
-.overview-page th { padding: 14px 20px; font-size: 10px; font-weight: 500; text-transform: uppercase; color: var(--muted-foreground); background: var(--primary-soft); text-align: left; }
-.overview-page td { padding: 17px 20px; font-size: 12px; }
-.overview-page tbody tr + tr { border-top: 1px solid var(--background); }
-.overview-page button { box-shadow: none; }
+.overview-page {
+  letter-spacing: 0;
+}
+.overview-page .overview-metric {
+  min-height: 170px;
+}
+.overview-page table {
+  font-size: 12px;
+}
+.overview-page th {
+  padding: 14px 20px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  background: var(--primary-soft);
+  text-align: left;
+}
+.overview-page td {
+  padding: 17px 20px;
+  font-size: 12px;
+}
+.overview-page tbody tr + tr {
+  border-top: 1px solid var(--background);
+}
+.overview-page button {
+  box-shadow: none;
+}
 @media (max-width: 639px) {
-  .overview-page .overview-metric { min-height: 155px; padding: 14px; }
-  .overview-page td, .overview-page th { padding: 12px; }
+  .overview-page .overview-metric {
+    min-height: 155px;
+    padding: 14px;
+  }
+  .overview-page td,
+  .overview-page th {
+    padding: 12px;
+  }
 }
 
 @layer base {

@@ -1,24 +1,49 @@
-# Biztrip Central Panel
+# HireD Ops — B2B Logistics Admin Panel
 
-Yes, create the HireD admin panel and start with the shared layout, mock data layer, Dashboard, B2B Trips, and Enquiries/CRM.
+A modern frontend administration panel for managing B2B trips, enquiries, client accounts, credit limits, and invoicing.
 
-This project was built with [Lovable](https://lovable.dev).
+## Features
 
-## Build with Lovable
+- **Dashboard**: Live operational metrics, lead pipeline, quick export, and active trip tracking.
+- **Trips Management**: Filter, schedule, and track B2B transport trips with status progression.
+- **Enquiries / CRM**: Lead tracking with lifecycle stages (New Lead, Contacted, Qualified, Negotiation, Won, Lost).
+- **Invoicing & Billing**: Invoice generator, status filters (Draft, Sent, Paid, Overdue), and details view.
+- **Accounts & Credit**: Client ledger, credit limit monitoring, and utilisation alerts.
+- **Fleet & Activity**: Real-time asset readiness and system audit trails.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/55932c3a-2b78-4721-8489-84fb9e0a963d).
+## Getting Started
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+### Prerequisites
 
-## Development
+- Node.js (v18+)
+- npm
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+### Installation
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+```bash
+npm install
+```
+
+### Running Locally
+
+To start the Vite development server:
+
+```bash
+npm start
+# or
 npm run dev
+```
+
+The application will be accessible at `http://localhost:3000`.
+
+### Building for Production
+
+```bash
+npm run build
+```
+
+### Running Tests
+
+```bash
+npm test
 ```
